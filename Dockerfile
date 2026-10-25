@@ -10,6 +10,8 @@ RUN apt-get update && apt-get install -y \
     libssl-dev \
     clang \
     cmake \
+    g++ \
+    make \
     git \
     && rm -rf /var/lib/apt/lists/*
 
