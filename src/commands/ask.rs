@@ -12,18 +12,18 @@ use anyhow::Result;
 
 pub fn run(args: AskArgs, config: &Config) -> Result<()> {
     // Determine shell type
-    let shell = args
+    let _shell = args
         .shell
         .map(|s| s.into())
         .unwrap_or_else(|| DetectedShell::detect().unwrap_or(DetectedShell::Pwsh));
 
     // Get model path
     let model_manager = ModelManager::new(config.model.clone());
-    let model_path = model_manager.ensure_model(args.model.as_deref())?;
+    model_manager.ensure_model(args.model.as_deref())?;
 
-    // Build prompt
+    // Build prompt with skill support
     let prompt_type = config.prompt.system;
-    let prompt = build_prompt(prompt_type, &args.query);
+    let prompt = crate::inference::prompt::build_prompt(config, prompt_type, &args.query, args.skill.as_deref());
 
     // Run inference
     let mut engine = InferenceEngine::new(config.model.clone())?;

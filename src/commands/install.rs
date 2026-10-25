@@ -1,8 +1,8 @@
 //! `soma install` command
 
-use crate::cli::args::InstallArgs;
+use crate::cli::args::{InstallArgs, ShellType};
 use crate::config::Config;
-use crate::shell::detector::{DetectedShell, ShellType};
+use crate::shell::detector::DetectedShell;
 use crate::shell::installer::{install, uninstall};
 use anyhow::Result;
 

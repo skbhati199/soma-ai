@@ -64,15 +64,17 @@ impl Config {
     }
 
     pub fn apply_cli_overrides(&mut self, cli: &crate::cli::Cli) {
-        if let Some(model) = &cli.command.get_model_override() {
-            self.model.name = model.clone();
+        if let Some(model) = cli.command.get_model_override() {
+            self.model.name = model.to_string();
         }
         // Add more CLI overrides as needed
     }
 
     pub fn save(&self, path: &PathBuf) -> Result<()> {
         let toml = toml::to_string_pretty(self)?;
-        std::fs::create_dir_all(path.parent().unwrap())?;
+        if let Some(parent) = path.parent() {
+            std::fs::create_dir_all(parent)?;
+        }
         std::fs::write(path, toml)?;
         Ok(())
     }
@@ -159,6 +161,8 @@ pub struct PromptConfig {
     pub max_tokens: u32,
     pub temperature: f32,
     pub stop_sequences: Vec<String>,
+    pub skills_dir: Option<String>,
+    pub max_skills: usize,
 }
 
 impl Default for PromptConfig {
@@ -168,6 +172,8 @@ impl Default for PromptConfig {
             max_tokens: 512,
             temperature: 0.1,
             stop_sequences: vec!["\n\n".to_string(), "```".to_string()],
+            skills_dir: Some("skills".to_string()),
+            max_skills: 2,
         }
     }
 }
@@ -178,11 +184,12 @@ pub enum SystemPromptType {
     PowerShell,
     Bash,
     Generic,
+    Auto,
 }
 
 impl Default for SystemPromptType {
     fn default() -> Self {
-        SystemPromptType::PowerShell
+        SystemPromptType::Auto
     }
 }
 

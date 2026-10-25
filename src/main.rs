@@ -15,7 +15,7 @@ mod shell;
 mod utils;
 
 use cli::Cli;
-use commands::{ask, completions, config_cmd, insert, install, model_cmd};
+use commands::{ask, completions, config_cmd, insert, install, model_cmd, skills};
 use config::Config;
 use utils::logging::init_logging;
 
@@ -40,6 +40,7 @@ fn main() -> Result<()> {
         cli::Commands::Install(args) => install::run(args, &config),
         cli::Commands::Config(args) => config_cmd::run(args, &config),
         cli::Commands::Model(args) => model_cmd::run(args, &config),
+        cli::Commands::Skills(args) => skills::run(args, &config),
         cli::Commands::Completions(args) => completions::run(args),
     };
 

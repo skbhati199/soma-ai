@@ -53,6 +53,9 @@ pub enum Commands {
     /// Manage models (pull, list, remove)
     Model(ModelArgs),
 
+    /// Manage skills (list, show)
+    Skills(SkillsArgs),
+
     /// Generate shell completions
     Completions(CompletionsArgs),
 }
@@ -72,7 +75,7 @@ pub struct AskArgs {
     pub model: Option<String>,
 
     /// Temperature (0.0-1.0)
-    #[arg(long, value_parser = clap::value_parser!(f32).range(0.0..=1.0))]
+    #[arg(long, value_parser = clap::value_parser!(f32))]
     pub temperature: Option<f32>,
 
     /// Max tokens to generate
@@ -86,6 +89,10 @@ pub struct AskArgs {
     /// Raw output (no formatting)
     #[arg(long)]
     pub raw: bool,
+
+    /// Force a specific skill (docker, powershell, filesystem)
+    #[arg(long, value_name = "SKILL")]
+    pub skill: Option<String>,
 }
 
 #[derive(Parser, Debug)]
@@ -103,12 +110,16 @@ pub struct InsertArgs {
     pub model: Option<String>,
 
     /// Temperature (0.0-1.0)
-    #[arg(long, value_parser = clap::value_parser!(f32).range(0.0..=1.0))]
+    #[arg(long, value_parser = clap::value_parser!(f32))]
     pub temperature: Option<f32>,
 
     /// Max tokens to generate
     #[arg(long)]
     pub max_tokens: Option<u32>,
+
+    /// Force a specific skill (docker, powershell, filesystem)
+    #[arg(long, value_name = "SKILL")]
+    pub skill: Option<String>,
 }
 
 #[derive(Parser, Debug)]
@@ -206,6 +217,23 @@ pub struct CompletionsArgs {
     /// Output file (stdout if not specified)
     #[arg(short, long)]
     pub output: Option<PathBuf>,
+}
+
+#[derive(Parser, Debug)]
+pub struct SkillsArgs {
+    #[command(subcommand)]
+    pub action: SkillsAction,
+}
+
+#[derive(Subcommand, Debug)]
+pub enum SkillsAction {
+    /// List available skills
+    List,
+    /// Show a specific skill
+    Show {
+        #[arg(value_name = "SKILL")]
+        name: String,
+    },
 }
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq, ValueEnum)]

@@ -6,6 +6,20 @@ use std::path::PathBuf;
 use which::which;
 
 use crate::config::schema::ShellType;
+use crate::shell::profiles;
+
+impl From<crate::cli::args::ShellType> for DetectedShell {
+    fn from(s: crate::cli::args::ShellType) -> Self {
+        match s {
+            crate::cli::args::ShellType::Pwsh => DetectedShell::Pwsh,
+            crate::cli::args::ShellType::Bash => DetectedShell::Bash,
+            crate::cli::args::ShellType::Zsh => DetectedShell::Zsh,
+            crate::cli::args::ShellType::Fish => DetectedShell::Fish,
+            crate::cli::args::ShellType::Cmd => DetectedShell::Cmd,
+            crate::cli::args::ShellType::Auto => DetectedShell::detect().unwrap_or(DetectedShell::Bash),
+        }
+    }
+}
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum DetectedShell {
