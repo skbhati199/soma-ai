@@ -1,17 +1,18 @@
 //! `soma insert` command - for keybindings
 
-use anyhow::Result;
-use crate::config::Config;
 use crate::cli::args::InsertArgs;
+use crate::config::Config;
 use crate::inference::engine::InferenceEngine;
-use crate::inference::prompt::build_prompt;
 use crate::inference::parser::extract_command;
+use crate::inference::prompt::build_prompt;
 use crate::model::manager::ModelManager;
 use crate::shell::detector::DetectedShell;
+use anyhow::Result;
 
 pub fn run(args: InsertArgs, config: &Config) -> Result<()> {
     // Determine shell type
-    let shell = args.shell
+    let shell = args
+        .shell
         .map(|s| s.into())
         .unwrap_or_else(|| DetectedShell::detect().unwrap_or(DetectedShell::Pwsh));
 

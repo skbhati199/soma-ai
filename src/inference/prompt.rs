@@ -1,7 +1,7 @@
 //! Prompt Templates
 
-use std::collections::HashMap;
 use crate::config::schema::SystemPromptType;
+use std::collections::HashMap;
 
 pub fn get_system_prompt(prompt_type: SystemPromptType) -> &'static str {
     match prompt_type {

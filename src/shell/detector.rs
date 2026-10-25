@@ -79,7 +79,14 @@ impl DetectedShell {
         {
             use std::process::Command;
             let output = Command::new("wmic")
-                .args(["process", "where", "ProcessId=", &std::process::id().to_string(), "get", "ParentProcessId"])
+                .args([
+                    "process",
+                    "where",
+                    "ProcessId=",
+                    &std::process::id().to_string(),
+                    "get",
+                    "ParentProcessId",
+                ])
                 .output()?;
             let stdout = String::from_utf8_lossy(&output.stdout);
             // Parse parent PID and get its name

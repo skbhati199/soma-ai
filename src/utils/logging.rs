@@ -1,7 +1,7 @@
 //! Logging Configuration
 
 use anyhow::Result;
-use tracing_subscriber::{EnvFilter, fmt, layer::SubscriberExt, util::SubscriberInitExt};
+use tracing_subscriber::{fmt, layer::SubscriberExt, util::SubscriberInitExt, EnvFilter};
 
 pub fn init_logging(verbose: u8, quiet: bool) -> Result<()> {
     if quiet {
@@ -27,13 +27,14 @@ pub fn init_logging(verbose: u8, quiet: bool) -> Result<()> {
 
     tracing_subscriber::registry()
         .with(filter)
-        .with(fmt::layer()
-            .with_writer(std::io::stderr)
-            .with_target(false)
-            .with_thread_ids(false)
-            .with_file(false)
-            .with_line_number(false)
-            .compact()
+        .with(
+            fmt::layer()
+                .with_writer(std::io::stderr)
+                .with_target(false)
+                .with_thread_ids(false)
+                .with_file(false)
+                .with_line_number(false)
+                .compact(),
         )
         .init();
 

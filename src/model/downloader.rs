@@ -1,13 +1,13 @@
 //! Model Downloader
 
-use anyhow::{Result, Context};
+use anyhow::{Context, Result};
+use indicatif::{ProgressBar, ProgressStyle};
+use reqwest::blocking::Client;
+use sha2::{Digest, Sha256};
 use std::fs;
 use std::fs::File;
 use std::io::{Read, Write};
 use std::path::Path;
-use indicatif::{ProgressBar, ProgressStyle};
-use reqwest::blocking::Client;
-use sha2::{Sha256, Digest};
 
 pub fn download_with_progress(url: &str, dest: &Path, expected_sha256: &str) -> Result<()> {
     let client = Client::new();

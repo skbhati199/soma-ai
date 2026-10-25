@@ -1,7 +1,7 @@
 //! Command Inserter - Insert commands into shell
 
-use anyhow::Result;
 use crate::shell::detector::DetectedShell;
+use anyhow::Result;
 
 /// Insert command at cursor position (for keybindings)
 pub fn insert_at_cursor(shell: &DetectedShell, command: &str) -> Result<()> {
@@ -72,7 +72,8 @@ function soma-insert {
         if ($cmd) { [Microsoft.PowerShell.PSConsoleReadLine]::Insert("`n$cmd") }
     }
 }
-"#.to_string(),
+"#
+        .to_string(),
 
         DetectedShell::Bash => r#"
 _soma_insert() {
@@ -86,7 +87,8 @@ _soma_insert() {
         fi
     fi
 }
-"#.to_string(),
+"#
+        .to_string(),
 
         DetectedShell::Zsh => r#"
 _soma_insert() {
@@ -101,7 +103,8 @@ _soma_insert() {
     fi
 }
 zle -N _soma_insert
-"#.to_string(),
+"#
+        .to_string(),
 
         DetectedShell::Fish => r#"
 function _soma_insert
@@ -114,7 +117,8 @@ function _soma_insert
         end
     end
 end
-"#.to_string(),
+"#
+        .to_string(),
 
         _ => String::new(),
     }

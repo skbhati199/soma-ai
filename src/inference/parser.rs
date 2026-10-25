@@ -64,7 +64,10 @@ mod tests {
 
     #[test]
     fn test_clean_simple() {
-        assert_eq!(clean_output("Get-ChildItem -Recurse"), "Get-ChildItem -Recurse");
+        assert_eq!(
+            clean_output("Get-ChildItem -Recurse"),
+            "Get-ChildItem -Recurse"
+        );
     }
 
     #[test]

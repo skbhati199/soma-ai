@@ -1,7 +1,10 @@
 //! Configuration Schema
 
 use anyhow::Result;
-use figment::{Figment, providers::{Format, Toml, Env, Serialized}};
+use figment::{
+    providers::{Env, Format, Serialized, Toml},
+    Figment,
+};
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 
@@ -38,8 +41,22 @@ impl Config {
         } else {
             // Default config locations
             figment = figment
-                .merge(Toml::file(dirs::config_dir().unwrap_or_default().join("soma/config.toml")).nested())
-                .merge(Toml::file(dirs::home_dir().unwrap_or_default().join(".config/soma/config.toml")).nested())
+                .merge(
+                    Toml::file(
+                        dirs::config_dir()
+                            .unwrap_or_default()
+                            .join("soma/config.toml"),
+                    )
+                    .nested(),
+                )
+                .merge(
+                    Toml::file(
+                        dirs::home_dir()
+                            .unwrap_or_default()
+                            .join(".config/soma/config.toml"),
+                    )
+                    .nested(),
+                )
                 .merge(Toml::file("./soma.toml").nested());
         }
 

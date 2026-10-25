@@ -75,7 +75,11 @@ fn copy_fallback(text: &str) -> Result<()> {
         for cmd in &["xclip", "xsel"] {
             if which::which(cmd).is_ok() {
                 let mut child = Command::new(cmd)
-                    .args(if *cmd == "xclip" { &["-selection", "clipboard"] } else { &["-b", "-i"] })
+                    .args(if *cmd == "xclip" {
+                        &["-selection", "clipboard"]
+                    } else {
+                        &["-b", "-i"]
+                    })
                     .stdin(std::process::Stdio::piped())
                     .spawn()?;
 

@@ -1,9 +1,9 @@
 //! `soma config` command
 
-use anyhow::Result;
+use crate::cli::args::{ConfigAction, ConfigArgs, ConfigFormat};
+use crate::config::loader::{ensure_config_dir, get_config_path};
 use crate::config::Config;
-use crate::cli::args::{ConfigArgs, ConfigAction, ConfigFormat};
-use crate::config::loader::{get_config_path, ensure_config_dir};
+use anyhow::Result;
 
 pub fn run(args: ConfigArgs, config: &Config) -> Result<()> {
     match args.action {
@@ -29,14 +29,16 @@ fn edit_config() -> Result<()> {
     let path = ensure_config_dir()?;
     let editor = std::env::var("EDITOR").unwrap_or_else(|_| {
         #[cfg(windows)]
-        { "notepad".to_string() }
+        {
+            "notepad".to_string()
+        }
         #[cfg(not(windows))]
-        { "vi".to_string() }
+        {
+            "vi".to_string()
+        }
     });
 
-    std::process::Command::new(&editor)
-        .arg(&path)
-        .status()?;
+    std::process::Command::new(&editor).arg(&path).status()?;
 
     println!("Edited config at {}", path.display());
     Ok(())
@@ -86,7 +88,7 @@ fn get_config(config: &Config, key: &str) -> Result<()> {
 
 fn set_config(config: &Config, key: &str, value: &str) -> Result<()> {
     let mut config = config.clone();
-    
+
     match key {
         "model.name" => config.model.name = value.to_string(),
         "model.auto_download" => config.model.auto_download = value.parse()?,

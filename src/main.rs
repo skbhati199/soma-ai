@@ -3,7 +3,7 @@
 
 use anyhow::Result;
 use clap::Parser;
-use tracing_subscriber::{EnvFilter, fmt};
+use tracing_subscriber::{fmt, EnvFilter};
 
 mod cli;
 mod commands;
@@ -15,7 +15,7 @@ mod shell;
 mod utils;
 
 use cli::Cli;
-use commands::{ask, config_cmd, insert, install, model_cmd, completions};
+use commands::{ask, completions, config_cmd, insert, install, model_cmd};
 use config::Config;
 use utils::logging::init_logging;
 

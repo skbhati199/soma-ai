@@ -28,8 +28,9 @@ embedded-model = []
 
 [dependencies]
 clap = { version = "4.5", features = ["derive", "env", "wrap_help"] }
-figment = { version = "0.11", features = ["toml", "env", "serde"] }
+figment = { version = "0.10", features = ["toml", "env", "serde_json"] }
 serde = { version = "1.0", features = ["derive"] }
+serde_yaml = "0.9"
 anyhow = "1.0"
 thiserror = "1.0"
 tracing = "0.1"
@@ -41,7 +42,7 @@ sha2 = "0.10"
 indicatif = "0.17"
 arboard = { version = "3.3", optional = true }
 clap_complete = { version = "4.5", optional = true }
-llama-cpp-2 = { version = "0.8", optional = true, features = ["default"] }
+llama-cpp-2 = { version = "0.1", optional = true, features = ["default"] }
 
 [profile.release]
 lto = true

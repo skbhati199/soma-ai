@@ -1,9 +1,9 @@
 //! `soma model` command
 
-use anyhow::Result;
+use crate::cli::args::{ModelAction, ModelArgs};
 use crate::config::Config;
-use crate::cli::args::{ModelArgs, ModelAction};
 use crate::model::manager::ModelManager;
+use anyhow::Result;
 
 pub fn run(args: ModelArgs, config: &Config) -> Result<()> {
     let manager = ModelManager::new(config.model.clone());
@@ -45,7 +45,12 @@ fn list_models(manager: &ModelManager) -> Result<()> {
     println!("{}", "-".repeat(80));
 
     for model in models {
-        println!("{:<40} {:>10}  {}", model.name, model.size_human(), model.path.display());
+        println!(
+            "{:<40} {:>10}  {}",
+            model.name,
+            model.size_human(),
+            model.path.display()
+        );
     }
     Ok(())
 }
@@ -56,7 +61,7 @@ fn remove_model(manager: &ModelManager, name: &str) -> Result<()> {
     stdout().flush()?;
     let mut input = String::new();
     std::io::stdin().read_line(&mut input)?;
-    
+
     if !input.trim().eq_ignore_ascii_case("y") {
         println!("Cancelled");
         return Ok(());
@@ -69,14 +74,14 @@ fn remove_model(manager: &ModelManager, name: &str) -> Result<()> {
 
 fn show_model_info(manager: &ModelManager, name: Option<String>) -> Result<()> {
     let info = manager.get_model_info(name.as_deref())?;
-    
+
     println!("Name: {}", info.name);
     println!("Path: {}", info.path.display());
     println!("Size: {}", info.size_human());
-    
+
     if let Some(modified) = info.modified {
         println!("Modified: {:?}", modified);
     }
-    
+
     Ok(())
 }

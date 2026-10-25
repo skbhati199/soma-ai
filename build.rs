@@ -14,7 +14,9 @@ fn main() {
     println!("cargo:rustc-env=SOMA_GIT_HASH={}", git_hash);
 
     // Build timestamp
-    let timestamp = chrono::Utc::now().format("%Y-%m-%d %H:%M:%S UTC").to_string();
+    let timestamp = chrono::Utc::now()
+        .format("%Y-%m-%d %H:%M:%S UTC")
+        .to_string();
     println!("cargo:rustc-env=SOMA_BUILD_TIME={}", timestamp);
 
     // Model hash (if embedded)
@@ -43,7 +45,7 @@ fn get_git_hash() -> Option<String> {
 
 #[cfg(feature = "embedded-model")]
 fn compute_model_hash() -> String {
-    use sha2::{Sha256, Digest};
+    use sha2::{Digest, Sha256};
     let model_path = PathBuf::from("model.gguf");
     if model_path.exists() {
         let content = fs::read(model_path).unwrap();

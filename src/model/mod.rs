@@ -1,9 +1,9 @@
 //! Model Module
 
-pub mod manager;
-pub mod embedded;
 pub mod downloader;
+pub mod embedded;
+pub mod manager;
 
-pub use manager::*;
-pub use embedded::*;
 pub use downloader::*;
+pub use embedded::*;
+pub use manager::*;

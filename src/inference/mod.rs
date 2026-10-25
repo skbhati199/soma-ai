@@ -1,9 +1,9 @@
 //! Inference Module
 
 pub mod engine;
-pub mod prompt;
 pub mod parser;
+pub mod prompt;
 
 pub use engine::*;
-pub use prompt::*;
 pub use parser::*;
+pub use prompt::*;

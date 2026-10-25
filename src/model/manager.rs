@@ -1,8 +1,8 @@
 //! Model Manager
 
-use anyhow::{Result, Context};
+use anyhow::{Context, Result};
+use sha2::{Digest, Sha256};
 use std::path::{Path, PathBuf};
-use sha2::{Sha256, Digest};
 
 use crate::config::schema::ModelConfig;
 use crate::model::downloader::download_with_progress;
@@ -50,7 +50,10 @@ impl ModelManager {
         }
 
         if !self.config.auto_download {
-            anyhow::bail!("Model not found at {} and auto_download is disabled", path.display());
+            anyhow::bail!(
+                "Model not found at {} and auto_download is disabled",
+                path.display()
+            );
         }
 
         tracing::info!("Model not found, downloading: {}", name);
@@ -60,7 +63,8 @@ impl ModelManager {
 
     fn download_model(&self, name: &str, path: &Path) -> Result<()> {
         // Find model info
-        let model_info = KNOWN_MODELS.iter()
+        let model_info = KNOWN_MODELS
+            .iter()
             .find(|(n, _, _)| *n == name)
             .context("Unknown model")?;
 

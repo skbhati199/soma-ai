@@ -1,7 +1,7 @@
 //! Output Module
 
-pub mod inserter;
 pub mod clipboard;
+pub mod inserter;
 
-pub use inserter::*;
 pub use clipboard::*;
+pub use inserter::*;
