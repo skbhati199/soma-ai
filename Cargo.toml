@@ -55,5 +55,8 @@ opt-level = "z"
 inherits = "release"
 debug = true
 
+[build-dependencies]
+chrono = { version = "0.4", features = ["serde"] }
+
 [workspace]
 members = []
