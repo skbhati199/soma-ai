@@ -20,7 +20,7 @@ npm-name = "soma-ai"
 npm-scope = "skbhati199"
 
 [features]
-default = ["inference", "clipboard", "completions"]
+default = ["clipboard", "completions"]
 inference = ["llama-cpp-2"]
 clipboard = ["arboard"]
 completions = ["clap_complete"]

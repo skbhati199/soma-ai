@@ -33,7 +33,7 @@ jobs:
           key: macos-intel-cargo-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Build
-        run: cargo build --release --target x86_64-apple-darwin --features inference,clipboard,completions
+        run: cargo build --release --target x86_64-apple-darwin
 
       - name: Prepare artifact
         run: |
@@ -76,7 +76,7 @@ jobs:
           key: macos-arm-cargo-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Build
-        run: cargo build --release --target aarch64-apple-darwin --features inference,clipboard,completions
+        run: cargo build --release --target aarch64-apple-darwin
 
       - name: Prepare artifact
         run: |

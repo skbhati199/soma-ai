@@ -23,7 +23,7 @@ COPY Cargo.toml Cargo.lock* ./
 
 # Create dummy src to cache dependencies
 RUN mkdir src && echo "fn main() {}" > src/main.rs
-RUN cargo build --release --features inference,clipboard,completions 2>/dev/null || true
+RUN cargo build --release 2>/dev/null || true
 
 # Copy actual source
 COPY src ./src
@@ -32,7 +32,7 @@ COPY build.rs ./
 
 # Build actual application
 ARG TARGET=x86_64-unknown-linux-gnu
-RUN cargo build --release --features inference,clipboard,completions && \
+RUN cargo build --release && \
     mkdir -p /app/target/${TARGET}/release && \
     cp /app/target/release/soma /app/target/${TARGET}/release/soma
 

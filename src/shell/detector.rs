@@ -123,7 +123,7 @@ impl DetectedShell {
     }
 
     fn identify_shell(path: &str) -> Option<Self> {
-        let name = PathBuf::from(path)
+        let name = std::path::Path::new(path)
             .file_stem()
             .and_then(|s| s.to_str())
             .unwrap_or("");

@@ -13,13 +13,13 @@ WORKDIR /app
 
 COPY Cargo.toml Cargo.lock* ./
 RUN mkdir src && echo "fn main() {}" > src/main.rs
-RUN cargo build --release --target x86_64-unknown-linux-musl --features inference,clipboard,completions 2>/dev/null || true
+RUN cargo build --release --target x86_64-unknown-linux-musl 2>/dev/null || true
 
 COPY src ./src
 COPY assets ./assets
 COPY build.rs ./
 
-RUN cargo build --release --target x86_64-unknown-linux-musl --features inference,clipboard,completions
+RUN cargo build --release --target x86_64-unknown-linux-musl
 
 FROM alpine:latest
 RUN apk add --no-cache ca-certificates

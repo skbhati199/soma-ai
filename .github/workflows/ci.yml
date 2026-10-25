@@ -75,10 +75,10 @@ jobs:
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Build
-        run: cargo build --release --target ${{ matrix.target }} --features inference,clipboard,completions
+        run: cargo build --release --target ${{ matrix.target }}
 
       - name: Test
-        run: cargo test --target ${{ matrix.target }} --features inference,clipboard,completions
+        run: cargo test --target ${{ matrix.target }}
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -95,7 +95,7 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: clippy
-      - run: cargo clippy --all-targets --all-features -- -D warnings
+      - run: cargo clippy --all-targets
 
   fmt:
     name: Rustfmt

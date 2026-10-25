@@ -45,3 +45,4 @@ plan*.md
 
 # Cargo install
 ~/.cargo/
+build_win.bat

@@ -7,16 +7,14 @@ use std::fs;
 use std::path::{Path, PathBuf};
 
 #[derive(Debug, Clone)]
-struct Skill {
-    name: String,
-    content: String,
-    triggers: Vec<String>,
+pub struct Skill {
+    pub name: String,
+    pub content: String,
+    pub triggers: Vec<String>,
 }
 
 pub fn build_prompt(config: &Config, system: SystemPromptType, query: &str, forced_skill: Option<&str>) -> String {
-    let base_prompt = get_base_prompt(system);
-    
-    let skills = if let SystemPromptType::Auto = system {
+    let skills = if system == SystemPromptType::Auto {
         load_skills_for_query(config, query, forced_skill)
     } else {
         Vec::new()
@@ -28,7 +26,7 @@ pub fn build_prompt(config: &Config, system: SystemPromptType, query: &str, forc
         format!("\n\n{}\n", skills.join("\n\n"))
     };
     
-    let system_prompt = if matches!(system, SystemPromptType::Auto) {
+    let system_prompt = if system == SystemPromptType::Auto {
         format!("{}{}", get_base_prompt(SystemPromptType::PowerShell), skills_text)
     } else {
         get_base_prompt(system).to_string()
@@ -90,7 +88,7 @@ fn load_skills_for_query(config: &Config, query: &str, forced_skill: Option<&str
     matched_skills.into_iter().map(|s| s.content).collect()
 }
 
-fn load_all_skills(skills_dir: &Path) -> Vec<Skill> {
+pub fn load_all_skills(skills_dir: &Path) -> Vec<Skill> {
     let mut skills = Vec::new();
     
     if let Ok(entries) = fs::read_dir(skills_dir) {
@@ -109,7 +107,7 @@ fn load_all_skills(skills_dir: &Path) -> Vec<Skill> {
     skills
 }
 
-fn parse_skill(content: &str) -> Option<Skill> {
+pub fn parse_skill(content: &str) -> Option<Skill> {
     // Parse YAML frontmatter
     let lines: Vec<&str> = content.lines().collect();
     if lines.is_empty() || lines[0] != "---" {
@@ -162,12 +160,6 @@ fn parse_skill(content: &str) -> Option<Skill> {
     })
 }
 
-#[derive(Debug, Clone)]
-struct Skill {
-    name: String,
-    content: String,
-    triggers: Vec<String>,
-}
 
 const POWERSHELL_SYSTEM_PROMPT: &str = r#"You are a PowerShell 7+ command expert on Windows. Output ONLY the PowerShell command(s) to run.
 

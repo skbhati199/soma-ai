@@ -11,7 +11,7 @@ use crate::shell::profiles::get_or_create_profile;
 const SOMA_MARKER: &str = "# >>> soma >>>";
 const SOMA_END_MARKER: &str = "# <<< soma <<<";
 
-pub fn install(shell: &DetectedShell, config: &Config, force: bool, dry_run: bool) -> Result<()> {
+pub fn install(shell: &DetectedShell, config: &Config, _force: bool, dry_run: bool) -> Result<()> {
     let profile_path = get_or_create_profile(shell)?;
 
     let content = generate_shell_config(shell, config)?;
@@ -154,8 +154,8 @@ _soma_insert() {{
     if [[ -n "$query" ]]; then
         local cmd=$(soma insert "$query")
         if [[ -n "$cmd" ]]; then
-            READLINE_LINE="${READLINE_LINE}$'\n'$cmd"
-            READLINE_POINT=${#READLINE_LINE}
+            READLINE_LINE="${{READLINE_LINE}}$'\n'$cmd"
+            READLINE_POINT=${{#READLINE_LINE}}
         fi
     fi
 }}

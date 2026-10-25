@@ -2,43 +2,39 @@
 
 /// Clean AI output to extract just the command
 pub fn clean_output(raw: &str) -> String {
-    let mut cleaned = raw.trim().to_string();
+    // If there is a code block ```lang\ncommand\n```, extract inside the fence
+    if let Some(start) = raw.find("```") {
+        let after_start = &raw[start + 3..];
+        let content_start = if let Some(newline) = after_start.find('\n') {
+            &after_start[newline + 1..]
+        } else {
+            after_start
+        };
 
-    // Remove markdown code fences
-    cleaned = remove_code_fences(&cleaned);
-
-    // Take first non-empty line
-    let first_line = cleaned
-        .lines()
-        .find(|line| !line.trim().is_empty())
-        .unwrap_or("");
-
-    first_line.trim().to_string()
-}
-
-fn remove_code_fences(text: &str) -> String {
-    let mut result = text.to_string();
-
-    // Remove ```language ... ```
-    if let Some(start) = result.find("```") {
-        if let Some(end) = result[start + 3..].find("```") {
-            let before = &result[..start];
-            let after = &result[start + 3 + end + 3..];
-            result = format!("{}{}", before, after);
+        if let Some(end) = content_start.find("```") {
+            let inside = &content_start[..end];
+            let first_line = inside
+                .lines()
+                .find(|l| !l.trim().is_empty())
+                .unwrap_or("");
+            return first_line.trim().trim_matches('`').to_string();
         }
     }
 
-    // Remove inline backticks
-    result = result.replace('`', "");
+    // Otherwise, find first non-empty line that isn't purely markdown fence
+    for line in raw.lines() {
+        let trimmed = line.trim();
+        if trimmed.is_empty() || trimmed.starts_with("```") {
+            continue;
+        }
+        return trimmed.trim_matches('`').to_string();
+    }
 
-    result
+    String::new()
 }
 
 /// Extract command from various AI output formats
 pub fn extract_command(output: &str) -> String {
-    let cleaned = clean_output(output);
-
-    // Handle common prefixes
     let prefixes = [
         "PowerShell Command:",
         "Command:",
@@ -49,13 +45,14 @@ pub fn extract_command(output: &str) -> String {
         "PS> ",
     ];
 
+    let mut current = output.trim();
     for prefix in &prefixes {
-        if cleaned.starts_with(prefix) {
-            return cleaned[prefix.len()..].trim().to_string();
+        if let Some(rest) = current.strip_prefix(prefix) {
+            current = rest.trim();
         }
     }
 
-    cleaned
+    clean_output(current)
 }
 
 #[cfg(test)]
