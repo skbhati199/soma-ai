@@ -1,0 +1,29 @@
+{
+  "version": "0.1.0",
+  "description": "Local AI terminal command assistant",
+  "homepage": "https://github.com/skbhati199/soma-ai",
+  "license": "MIT",
+  "architecture": {
+    "64bit": {
+      "url": "https://github.com/skbhati199/soma-ai/releases/download/v0.1.0/soma-x86_64-pc-windows-msvc.zip",
+      "hash": "REPLACE_WITH_SHA256",
+      "extract_dir": ""
+    }
+  },
+  "bin": "soma.exe",
+  "checkver": {
+    "github": "https://github.com/skbhati199/soma-ai"
+  },
+  "autoupdate": {
+    "architecture": {
+      "64bit": {
+        "url": "https://github.com/skbhati199/soma-ai/releases/download/v$version/soma-x86_64-pc-windows-msvc.zip"
+      }
+    }
+  },
+  "notes": [
+    "To enable shell integration, run:",
+    "  soma install --shell pwsh",
+    "Then restart your terminal."
+  ]
+}

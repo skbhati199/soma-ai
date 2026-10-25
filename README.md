@@ -36,14 +36,20 @@ Works offline after first model download. Supports PowerShell, Bash, Zsh, and Fi
 
 ```bash
 # Download latest release for your platform
-# Linux
+# Linux (glibc)
 curl -L https://github.com/skbhati199/soma-ai/releases/latest/download/soma-x86_64-unknown-linux-gnu.tar.gz | tar xz
+
+# Linux (musl static)
+curl -L https://github.com/skbhati199/soma-ai/releases/latest/download/soma-x86_64-unknown-linux-musl.tar.gz | tar xz
 
 # macOS (Intel)
 curl -L https://github.com/skbhati199/soma-ai/releases/latest/download/soma-x86_64-apple-darwin.tar.gz | tar xz
 
 # macOS (Apple Silicon)
 curl -L https://github.com/skbhati199/soma-ai/releases/latest/download/soma-aarch64-apple-darwin.tar.gz | tar xz
+
+# macOS (Universal Binary)
+curl -L https://github.com/skbhati199/soma-ai/releases/latest/download/soma-universal-apple-darwin.tar.gz | tar xz
 
 # Windows (PowerShell)
 iwr -useb https://github.com/skbhati199/soma-ai/releases/latest/download/soma-x86_64-pc-windows-msvc.zip -outfile soma.zip
@@ -53,14 +59,38 @@ Expand-Archive soma.zip
 ### Install (Package Managers)
 
 ```bash
+# npm (cross-platform)
+npm install -g soma-ai
+
 # Scoop (Windows)
 scoop install soma
 
 # Homebrew (macOS/Linux)
-brew install soma
+brew install skbhati199/soma/soma
+
+# Chocolatey (Windows)
+choco install soma-ai
+
+# Winget (Windows)
+winget install skbhati199.soma
 
 # Cargo (from source)
 cargo install --git https://github.com/skbhati199/soma-ai --features inference,clipboard,completions
+
+# Linux package managers (after repo setup)
+# apt install soma-ai
+# dnf install soma-ai
+# pacman -S soma-ai
+```
+
+### Install (One-liner)
+
+```bash
+# Linux/macOS (auto-detects platform)
+curl -fsSL https://raw.githubusercontent.com/skbhati199/soma-ai/main/scripts/install.sh | bash
+
+# Windows (PowerShell)
+irm https://raw.githubusercontent.com/skbhati199/soma-ai/main/scripts/install.ps1 | iex
 ```
 
 ### Setup Shell Integration
@@ -82,6 +112,24 @@ This adds:
 - Shell completions
 
 Restart your shell or run `source ~/.bashrc` (or `. $PROFILE` in PowerShell).
+
+---
+
+## 📦 All Installation Methods
+
+| Method | Command | Platforms |
+|--------|---------|-----------|
+| **npm** | `npm install -g soma-ai` | 🐧 Linux, 🍎 macOS, 🪟 Windows |
+| **Homebrew** | `brew install skbhati199/soma/soma` | 🐧 Linux, 🍎 macOS |
+| **Scoop** | `scoop install soma` | 🪟 Windows |
+| **Chocolatey** | `choco install soma-ai` | 🪟 Windows |
+| **Winget** | `winget install skbhati199.soma` | 🪟 Windows |
+| **APT** | `apt install soma-ai` | 🐧 Debian/Ubuntu |
+| **DNF** | `dnf install soma-ai` | 🐧 Fedora/RHEL |
+| **Pacman** | `pacman -S soma-ai` | 🐧 Arch Linux |
+| **Cargo** | `cargo install --git https://github.com/skbhati199/soma-ai --features inference,clipboard,completions` | All (from source) |
+| **Binary** | [Download](https://github.com/skbhati199/soma-ai/releases) | All |
+| **One-liner** | `curl -fsSL .../install.sh \| bash` | 🐧 Linux, 🍎 macOS |
 
 ---
 
@@ -234,6 +282,43 @@ cargo build --release --target x86_64-apple-darwin
 cargo build --release --target aarch64-apple-darwin
 lipo -create -output soma target/x86_64-apple-darwin/release/soma target/aarch64-apple-darwin/release/soma
 ```
+
+---
+
+## 🔄 CI/CD Pipeline
+
+### Automated Releases (per-platform)
+
+The project uses **separate GitHub Actions workflows per platform** for maximum control:
+
+| Workflow | Platforms | Trigger |
+|----------|-----------|---------|
+| `release-linux.yml` | Linux (glibc + musl) | Tag push `v*` |
+| `release-windows.yml` | Windows (MSVC) | Tag push `v*` |
+| `release-macos.yml` | macOS (Intel + ARM + Universal) | Tag push `v*` |
+| `npm-publish.yml` | npm registry | GitHub Release |
+
+Each platform builds independently, uploads artifacts, and generates SHA256 checksums.
+
+### CI Checks (every push/PR)
+
+| Check | Tool |
+|-------|------|
+| Build | `cargo build --release` |
+| Test | `cargo test` |
+| Lint | `cargo clippy --all-targets --all-features -D warnings` |
+| Format | `cargo fmt --all -- --check` |
+| Audit | `cargo audit` |
+| Dependencies | Dependabot (weekly) |
+
+### Release Process
+
+1. **Tag a version**: `git tag v0.1.0 && git push origin v0.1.0`
+2. **GitHub Actions** builds for all 5 platforms in parallel
+3. **Artifacts uploaded** with SHA256 checksums
+4. **GitHub Release** created with notes
+5. **npm package** published automatically
+6. **Package manager formulas** updated (via separate repos/bots)
 
 ---
 

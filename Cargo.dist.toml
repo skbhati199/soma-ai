@@ -1,0 +1,88 @@
+# Cargo-dist Configuration
+# For automated cross-platform releases
+# See: https://github.com/axodotdev/cargo-dist
+
+[workspace.metadata.cargo-dist]
+# GitHub repository
+github-repo = "skbhati199/soma-ai"
+
+# Installers
+installers = ["shell", "powershell", "npm", "homebrew", "scoop", "winget", "apt", "dnf", "pacman", "choco"]
+
+# Binary names
+binary-name = "soma"
+
+# Artifact formats
+artifact-formats = ["tar.gz", "zip", "msi", "dmg"]
+
+# Platforms to build for
+targets = [
+  "x86_64-unknown-linux-gnu",
+  "x86_64-unknown-linux-musl",
+  "aarch64-unknown-linux-gnu",
+  "aarch64-unknown-linux-musl",
+  "x86_64-pc-windows-msvc",
+  "aarch64-pc-windows-msvc",
+  "x86_64-apple-darwin",
+  "aarch64-apple-darwin",
+]
+
+# Installer settings
+[workspace.metadata.cargo-dist.installer]
+# Shell installer
+shell = { 
+  # Install to ~/.local/bin or /usr/local/bin
+  default-path = "~/.local/bin"
+}
+
+# PowerShell installer
+powershell = {
+  # Install to $env:USERPROFILE\.soma\bin
+  default-path = "$env:USERPROFILE\\.soma\\bin"
+}
+
+# Homebrew formula
+homebrew = {
+  tap = "skbhati199/homebrew-soma",
+  commit-author = "GitHub Actions <actions@github.com>"
+}
+
+# Scoop manifest
+scoop = {
+  bucket = "skbhati199/scoop-soma",
+  commit-author = "GitHub Actions <actions@github.com>"
+}
+
+# Winget manifest
+winget = {
+  # Requires Microsoft approval for public winget
+  # Can use private winget source
+}
+
+# npm package
+npm = {
+  package-name = "soma-ai",
+  scope = "skbhati199",
+  # Creates platform-specific optionalDependencies
+}
+
+# APT repository
+apt = {
+  repository = "skbhati199/soma-apt",
+  component = "main"
+}
+
+# DNF/YUM repository
+dnf = {
+  repository = "skbhati199/soma-dnf"
+}
+
+# Pacman repository
+pacman = {
+  repository = "skbhati199/soma-pacman"
+}
+
+# Chocolatey
+choco = {
+  # Requires Chocolatey approval
+}

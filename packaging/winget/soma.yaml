@@ -1,0 +1,31 @@
+PackageIdentifier: skbhati199.soma
+PackageVersion: 0.1.0
+PackageName: Soma AI
+Publisher: skbhati199
+License: MIT
+LicenseUrl: https://github.com/skbhati199/soma-ai/blob/main/LICENSE
+ShortDescription: Local AI terminal command assistant
+Moniker: soma
+Tags:
+- ai
+- terminal
+- cli
+- llm
+- powershell
+- bash
+PackageUrl: https://github.com/skbhati199/soma-ai
+Installers:
+- Architecture: x64
+  InstallerType: zip
+  InstallerUrl: https://github.com/skbhati199/soma-ai/releases/download/v0.1.0/soma-x86_64-pc-windows-msvc.zip
+  InstallerSha256: REPLACE_WITH_SHA256
+  NestedInstallerType: portable
+  NestedInstallerFiles:
+  - RelativeFilePath: soma.exe
+    PortableCommandAlias: soma
+  Scope: user
+  InstallerSwitches:
+    Silent: /S
+    SilentWithProgress: /S
+ManifestType: installer
+ManifestVersion: 1.5.0

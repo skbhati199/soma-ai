@@ -1,0 +1,18 @@
+# Maintainer: yourusername <your@email.com>
+pkgname=soma-ai
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="Local AI terminal command assistant"
+arch=('x86_64' 'aarch64')
+url="https://github.com/yourusername/soma-ai"
+license=('MIT')
+depends=()
+makedepends=('tar')
+source=("https://github.com/yourusername/soma-ai/releases/download/v${pkgver}/soma-x86_64-unknown-linux-gnu.tar.gz")
+sha256sums=('REPLACE_WITH_SHA256')
+
+package() {
+    install -Dm755 "$srcdir/soma" "$pkgdir/usr/bin/soma"
+    install -Dm644 "$srcdir/README.md" "$pkgdir/usr/share/doc/$pkgname/README.md"
+    install -Dm644 "$srcdir/LICENSE" "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}

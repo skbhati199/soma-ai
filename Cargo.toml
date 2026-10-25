@@ -5,9 +5,19 @@ edition = "2021"
 license = "MIT"
 description = "Local AI terminal command assistant - single binary"
 repository = "https://github.com/skbhati199/soma-ai"
+documentation = "https://github.com/skbhati199/soma-ai#readme"
+homepage = "https://github.com/skbhati199/soma-ai"
 readme = "README.md"
-keywords = ["ai", "terminal", "cli", "llm", "powershell", "bash"]
-categories = ["command-line-utilities", "development-tools"]
+keywords = ["ai", "terminal", "cli", "llm", "powershell", "bash", "command-assistant", "local-llm"]
+categories = ["command-line-utilities", "development-tools", "development-tools::debugging"]
+
+[package.metadata]
+# For cargo-dist / cargo-release
+github-repo = "skbhati199/soma-ai"
+
+# For npm package metadata
+npm-name = "soma-ai"
+npm-scope = "skbhati199"
 
 [features]
 default = ["inference", "clipboard", "completions"]

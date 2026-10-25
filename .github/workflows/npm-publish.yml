@@ -1,0 +1,79 @@
+name: Publish to npm
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish-npm:
+    name: Publish to npm
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Download release artifacts
+        run: |
+          mkdir -p bin
+          # Download all platform binaries
+          gh release download ${{ github.ref_name }} --repo ${{ github.repository }} --pattern 'soma-*.tar.gz' --pattern 'soma-*.zip' --dir artifacts
+
+      - name: Extract and organize binaries
+        run: |
+          mkdir -p npm-package/bin
+          cd artifacts
+          
+          # Extract each platform
+          for file in *.tar.gz; do
+            if [ -f "$file" ]; then
+              platform=$(echo "$file" | sed 's/soma-\(.*\)\.tar\.gz/\1/')
+              mkdir -p "../npm-package/platforms/$platform"
+              tar -xzf "$file" -C "../npm-package/platforms/$platform"
+              # Rename binary to include platform
+              if [ -f "../npm-package/platforms/$platform/soma" ]; then
+                mv "../npm-package/platforms/$platform/soma" "../npm-package/platforms/$platform/soma-$platform"
+              fi
+            fi
+          done
+          
+          for file in *.zip; do
+            if [ -f "$file" ]; then
+              platform=$(echo "$file" | sed 's/soma-\(.*\)\.zip/\1/')
+              mkdir -p "../npm-package/platforms/$platform"
+              unzip -o "$file" -d "../npm-package/platforms/$platform"
+              if [ -f "../npm-package/platforms/$platform/soma.exe" ]; then
+                mv "../npm-package/platforms/$platform/soma.exe" "../npm-package/platforms/$platform/soma-$platform.exe"
+              fi
+            fi
+          done
+
+      - name: Create platform-specific npm packages
+        run: |
+          # This would create @soma-ai/linux-x64, @soma-ai/darwin-arm64, etc.
+          # For simplicity, we'll create a single package with optionalDependencies
+          # pointing to platform-specific scoped packages
+          
+          # In practice, you'd publish separate packages:
+          # npm publish ./platforms/linux-x64 --access public
+          # npm publish ./platforms/darwin-arm64 --access public
+          # etc.
+          echo "Platform packages would be published here"
+
+      - name: Publish main package
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

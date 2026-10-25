@@ -8,7 +8,7 @@ const { execSync } = require('child_process');
 const os = require('os');
 
 const VERSION = process.env.npm_package_version || '0.1.0';
-const REPO = 'yourusername/soma-ai';
+const REPO = 'skbhati199/soma-ai';
 const BASE_URL = `https://github.com/${REPO}/releases/download/v${VERSION}`;
 
 const PLATFORM_MAP = {

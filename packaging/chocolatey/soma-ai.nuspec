@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>soma-ai</id>
+    <version>0.1.0</version>
+    <title>Soma AI</title>
+    <authors>skbhati199</authors>
+    <owners>skbhati199</owners>
+    <description>Local AI terminal command assistant - single binary</description>
+    <projectUrl>https://github.com/skbhati199/soma-ai</projectUrl>
+    <licenseUrl>https://github.com/skbhati199/soma-ai/blob/main/LICENSE</licenseUrl>
+    <tags>ai terminal cli llm powershell bash command-assistant</tags>
+    <packageSourceUrl>https://github.com/skbhati199/soma-ai</packageSourceUrl>
+    <docsUrl>https://github.com/skbhati199/soma-ai#readme</docsUrl>
+    <mailingListUrl>https://github.com/skbhati199/soma-ai/discussions</mailingListUrl>
+    <bugTrackerUrl>https://github.com/skbhati199/soma-ai/issues</bugTrackerUrl>
+  </metadata>
+  <files>
+    <file src="tools\soma.exe" target="tools" />
+  </files>
+</package>
