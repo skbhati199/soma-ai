@@ -1,0 +1,71 @@
+# Soma Configuration
+# This file is loaded from ~/.config/soma/config.toml (or %APPDATA%\soma\config.toml on Windows)
+
+[model]
+# Model filename (must be in cache_dir or will be auto-downloaded)
+name = "qwen2.5-coder-1.5b-instruct-q4_k_m.gguf"
+
+# Automatically download model if not found
+auto_download = true
+
+# Context window size (tokens)
+context_size = 4096
+
+# Number of CPU threads (0 = auto)
+threads = 0
+
+# GPU layers to offload (0 = CPU only, -1 = all)
+# Requires llama.cpp built with CUDA/Metal support
+gpu_layers = 0
+
+# Model cache directory
+# cache_dir = "/custom/path/to/models"  # optional override
+
+[shell]
+# Default shell (auto-detect if not specified)
+default = "auto"
+
+# Keybinding for insert command
+keybind = "ctrl+space"
+
+# Alias for ask command
+alias = "??"
+
+# Install shell completions
+install_completions = true
+
+[prompt]
+# System prompt type
+system = "powershell"  # options: powershell, bash, generic
+
+# Maximum tokens to generate
+max_tokens = 512
+
+# Sampling temperature (0.0 = deterministic, 1.0 = creative)
+temperature = 0.1
+
+# Stop sequences
+stop_sequences = ["\n\n", "```"]
+
+[output]
+# How to output the command
+# next_line = insert on next line (default)
+# at_cursor = insert at cursor position
+# clipboard_only = only copy to clipboard
+insert_mode = "next_line"
+
+# Show confirmation message
+show_confirmation = true
+
+# Copy to clipboard
+copy_to_clipboard = true
+
+[paths]
+# Config directory (auto-detected if not specified)
+# config_dir = "~/.config/soma"
+
+# Cache directory for models
+# cache_dir = "~/.cache/soma"
+
+# Data directory
+# data_dir = "~/.local/share/soma"

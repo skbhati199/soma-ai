@@ -1,0 +1,48 @@
+# Rust
+/target/
+**/*.rs.bk
+Cargo.lock
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Model files (downloaded)
+*.gguf
+
+# Logs
+*.log
+
+# Release artifacts
+release/
+*.tar.gz
+*.zip
+checksums.txt
+
+# Environment
+.env
+.env.local
+
+# Test output
+test-output/
+
+# Planning documents
+PLAN*.md
+plan*.md
+
+# Local SQLite databases & memory
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+
+# Cargo install
+~/.cargo/

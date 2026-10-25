@@ -1,0 +1,58 @@
+{
+  "name": "soma-ai",
+  "version": "0.1.0",
+  "description": "Local AI terminal command assistant - single binary",
+  "main": "index.js",
+  "bin": {
+    "soma": "bin/soma"
+  },
+  "scripts": {
+    "install": "node scripts/install.js",
+    "postinstall": "node scripts/postinstall.js",
+    "test": "node scripts/test.js"
+  },
+  "keywords": [
+    "ai",
+    "terminal",
+    "cli",
+    "llm",
+    "powershell",
+    "bash",
+    "command-assistant"
+  ],
+  "author": "Soma AI Contributors",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/skbhati199/soma-ai.git"
+  },
+  "bugs": {
+    "url": "https://github.com/skbhati199/soma-ai/issues"
+  },
+  "homepage": "https://github.com/skbhati199/soma-ai#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "os": [
+    "darwin",
+    "linux",
+    "win32"
+  ],
+  "cpu": [
+    "x64",
+    "arm64"
+  ],
+  "optionalDependencies": {
+    "@soma-ai/linux-x64": "0.1.0",
+    "@soma-ai/linux-arm64": "0.1.0",
+    "@soma-ai/darwin-x64": "0.1.0",
+    "@soma-ai/darwin-arm64": "0.1.0",
+    "@soma-ai/win32-x64": "0.1.0"
+  },
+  "files": [
+    "bin/",
+    "scripts/",
+    "README.md",
+    "LICENSE"
+  ]
+}
