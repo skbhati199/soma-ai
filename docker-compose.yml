@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  # Build and test service
+  soma-build:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder
+    volumes:
+      - .:/app
+      - cargo-cache:/usr/local/cargo/registry
+      - target-cache:/app/target
+    environment:
+      - CARGO_TERM_COLOR=always
+    command: cargo test --features inference,clipboard,completions
+
+  # Release build service
+  soma-release:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder
+    volumes:
+      - .:/app
+      - cargo-cache:/usr/local/cargo/registry
+      - target-cache:/app/target
+    environment:
+      - CARGO_TERM_COLOR=always
+    command: cargo build --release --features inference,clipboard,completions
+
+  # Runtime service for testing
+  soma-test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/home/soma/soma-ai
+    working_dir: /home/soma
+    entrypoint: ["soma"]
+    command: ["--help"]
+
+  # Cross-compilation service for Linux targets
+  soma-cross:
+    image: messense/rust-musl-cross:x86_64-musl
+    volumes:
+      - .:/home/rust/src
+      - cargo-cache:/home/rust/.cargo/registry
+      - target-cache:/home/rust/src/target
+    working_dir: /home/rust/src
+    command: cargo build --release --target x86_64-unknown-linux-musl --features inference,clipboard,completions
+
+volumes:
+  cargo-cache:
+  target-cache:

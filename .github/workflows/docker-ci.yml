@@ -1,0 +1,130 @@
+name: Docker CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  release:
+    types: [published]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  # Build and test in Docker
+  docker-test:
+    name: Test in Docker
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build test image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          target: builder
+          load: true
+          tags: soma-test:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Run tests
+        run: docker run --rm soma-test:latest cargo test --features inference,clipboard,completions
+
+  # Build release binaries using Docker
+  docker-build:
+    name: Build Release (${{ matrix.target }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: x86_64-unknown-linux-gnu
+            dockerfile: Dockerfile
+            artifact: soma
+          - target: x86_64-unknown-linux-musl
+            dockerfile: Dockerfile.musl
+            artifact: soma
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build release
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          dockerfile: ${{ matrix.dockerfile }}
+          target: builder
+          build-args: |
+            TARGET=${{ matrix.target }}
+          load: true
+          tags: soma-${{ matrix.target }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Extract binary
+        run: |
+          mkdir -p release
+          docker run --rm soma-${{ matrix.target }}:latest \
+            tar -czf - -C /app target/${{ matrix.target }}/release/${{ matrix.artifact }} | tar -xzf - -C release
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: soma-${{ matrix.target }}
+          path: release/${{ matrix.artifact }}
+          retention-days: 7
+
+  # Publish Docker image on release
+  docker-publish:
+    name: Publish Docker Image
+    runs-on: ubuntu-latest
+    needs: [docker-test, docker-build]
+    if: github.event_name == 'release'
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
