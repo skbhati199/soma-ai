@@ -13,10 +13,7 @@ pub fn clean_output(raw: &str) -> String {
 
         if let Some(end) = content_start.find("```") {
             let inside = &content_start[..end];
-            let first_line = inside
-                .lines()
-                .find(|l| !l.trim().is_empty())
-                .unwrap_or("");
+            let first_line = inside.lines().find(|l| !l.trim().is_empty()).unwrap_or("");
             return first_line.trim().trim_matches('`').to_string();
         }
     }

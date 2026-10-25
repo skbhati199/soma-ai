@@ -15,7 +15,9 @@ mod shell;
 mod utils;
 
 use cli::Cli;
-use commands::{ask, completions, config as config_cmd, insert, install, model as model_cmd, skills};
+use commands::{
+    ask, completions, config as config_cmd, insert, install, model as model_cmd, skills,
+};
 use config::Config;
 use utils::logging::init_logging;
 

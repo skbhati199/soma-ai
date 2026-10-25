@@ -16,7 +16,9 @@ impl From<crate::cli::args::ShellType> for DetectedShell {
             crate::cli::args::ShellType::Zsh => DetectedShell::Zsh,
             crate::cli::args::ShellType::Fish => DetectedShell::Fish,
             crate::cli::args::ShellType::Cmd => DetectedShell::Cmd,
-            crate::cli::args::ShellType::Auto => DetectedShell::detect().unwrap_or(DetectedShell::Bash),
+            crate::cli::args::ShellType::Auto => {
+                DetectedShell::detect().unwrap_or(DetectedShell::Bash)
+            }
         }
     }
 }

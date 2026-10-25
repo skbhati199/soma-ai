@@ -22,7 +22,12 @@ pub fn run(args: InsertArgs, config: &Config) -> Result<()> {
 
     // Build prompt with skill support
     let prompt_type = config.prompt.system;
-    let prompt = crate::inference::prompt::build_prompt(config, prompt_type, &args.query, args.skill.as_deref());
+    let prompt = crate::inference::prompt::build_prompt(
+        config,
+        prompt_type,
+        &args.query,
+        args.skill.as_deref(),
+    );
 
     // Run inference
     let mut engine = InferenceEngine::new(config.model.clone())?;

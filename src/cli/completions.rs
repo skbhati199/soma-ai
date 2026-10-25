@@ -35,7 +35,7 @@ impl From<super::args::ShellType> for Shell {
             super::args::ShellType::Fish => Shell::Fish,
             super::args::ShellType::Pwsh => Shell::PowerShell,
             super::args::ShellType::Cmd => Shell::PowerShell, // cmd doesn't have native completions
-            super::args::ShellType::Auto => Shell::Bash, // fallback
+            super::args::ShellType::Auto => Shell::Bash,      // fallback
         }
     }
 }
