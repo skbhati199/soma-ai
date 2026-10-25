@@ -1,0 +1,30 @@
+# Dockerfile.musl for static binary build
+FROM rust:1.99-alpine AS builder
+
+RUN apk add --no-cache \
+    musl-dev \
+    clang \
+    cmake \
+    git \
+    make \
+    linux-headers
+
+WORKDIR /app
+
+COPY Cargo.toml Cargo.lock* ./
+RUN mkdir src && echo "fn main() {}" > src/main.rs
+RUN cargo build --release --target x86_64-unknown-linux-musl --features inference,clipboard,completions 2>/dev/null || true
+
+COPY src ./src
+COPY assets ./assets
+COPY build.rs ./
+
+RUN cargo build --release --target x86_64-unknown-linux-musl --features inference,clipboard,completions
+
+FROM alpine:latest
+RUN apk add --no-cache ca-certificates
+COPY --from=builder /app/target/x86_64-unknown-linux-musl/release/soma /usr/local/bin/soma
+USER guest
+WORKDIR /home/guest
+ENTRYPOINT ["soma"]
+CMD ["--help"]

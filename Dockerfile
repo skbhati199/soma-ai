@@ -17,7 +17,7 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 
 # Copy Cargo files first for caching
-COPY Cargo.toml Cargo.lock ./
+COPY Cargo.toml Cargo.lock* ./
 
 # Create dummy src to cache dependencies
 RUN mkdir src && echo "fn main() {}" > src/main.rs
@@ -29,7 +29,10 @@ COPY assets ./assets
 COPY build.rs ./
 
 # Build actual application
-RUN cargo build --release --features inference,clipboard,completions
+ARG TARGET=x86_64-unknown-linux-gnu
+RUN cargo build --release --features inference,clipboard,completions && \
+    mkdir -p /app/target/${TARGET}/release && \
+    cp /app/target/release/soma /app/target/${TARGET}/release/soma
 
 # Runtime stage
 FROM debian:bookworm-slim

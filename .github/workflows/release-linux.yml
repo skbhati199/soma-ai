@@ -50,7 +50,7 @@ jobs:
           cat checksums.txt
 
       - name: Upload to Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: |
             release/soma-x86_64-unknown-linux-gnu.tar.gz
@@ -98,7 +98,7 @@ jobs:
           cat checksums.txt
 
       - name: Upload to Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: |
             release/soma-x86_64-unknown-linux-musl.tar.gz

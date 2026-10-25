@@ -21,9 +21,5 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "09:00"
-    labels:
-      - "dependencies"
-      - "github-actions"
+      interval: "monthly"
+    open-pull-requests-limit: 0
